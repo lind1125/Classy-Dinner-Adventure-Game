@@ -1,0 +1,24 @@
+body {
+    background-color: beige;
+    text-align: center;
+}
+
+.narrative {
+    background-color: slateblue;
+    margin: auto;
+    width: 50%;
+    height: 400px;
+}
+
+section {
+    margin: 10px auto;
+    width: 60%;
+    display: flex;
+    justify-content: space-around;
+}
+
+section div {
+    background-color: gray;
+    height: 200px;
+    width: 400px;
+}
