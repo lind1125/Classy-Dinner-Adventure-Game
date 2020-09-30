@@ -9,16 +9,23 @@
 <body>
     <h1>Classy Dinner</h1>
     <div class="narrative">WORDS GO HERE</div>
-    <div id="action-display"></div>
+    <div id="action-display">
+        <div id="displayed-action">Selected Action</div>
+        <div id="displayed-target">Selected Target</div>
+    </div>
     <section>
         <div id="action-container">
             <div class="interactive action" id="walk-to">Walk to</div>
-            <div class="interactive action" id="pick-up">Pick Up</div>
-            <div class="interactive action" id="drop">Drop</div>
-            <div class="interactive action" id="push">Push</div>
+            <div class="interactive action" id="look-at">Look at</div>
             <div class="interactive action" id="talk-to">Talk to</div>
+            <div class="interactive action" id="grab">Grab</div>
+            <div class="interactive action" id="drop">Drop</div>
+            <div class="interactive action" id="use">Use</div>
         </div>
-        <div id="inventory">Inventory</div>
+        <div id="inventory">
+            <h4>Inventory</h4>
+            <div class="interactive item">Chewing gum</div>
+        </div>
     </section>
 
     <script src="./app.js"></script>
