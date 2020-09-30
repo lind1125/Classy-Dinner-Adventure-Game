@@ -22,3 +22,15 @@ section div {
     height: 200px;
     width: 400px;
 }
+
+#action-container { 
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.action {
+    background-color: hotpink;
+    height: 100px;
+    width: 100px;
+    margin: 1px;
+}
