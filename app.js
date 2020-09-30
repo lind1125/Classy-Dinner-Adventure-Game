@@ -16,6 +16,13 @@ const generateButtons = () => {
     }
 }
 
-const makeActive = () => {
-
+const makeActive = (e) => {
+    //highlight selected text and add it to the display window
+    const newClass = e.target.classList
+    newClass.toggle('selected')
 }
+
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    generateButtons()
+})

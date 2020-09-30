@@ -10,6 +10,13 @@ body {
     height: 400px;
 }
 
+#action-display {
+    background-color: skyblue;
+    margin: 10px auto;
+    width: 50%;
+    height: 2em;
+}
+
 section {
     margin: 10px auto;
     width: 60%;
@@ -19,7 +26,7 @@ section {
 
 section div {
     background-color: gray;
-    height: 200px;
+    height: 180px;
     width: 400px;
 }
 
@@ -30,7 +37,11 @@ section div {
 
 .action {
     background-color: hotpink;
-    height: 100px;
+    height: 60px;
     width: 100px;
     margin: 1px;
+}
+
+.selected {
+    background-color: #bada55;
 }
