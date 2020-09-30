@@ -1,3 +1,15 @@
+//results modal function (what pops up when you perform an action)
+const result = (text) => {
+    let modal = document.querySelector('#result');
+    let span = document.querySelector('.close');
+    let content = document.querySelector('.modal-content').children[0]
+    content.innerText = `${text}`
+    modal.style.display = "block"
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+}
+
 
 // inventory items
 class Item {
@@ -7,70 +19,40 @@ class Item {
     }
     walkTo(){
         // default modal "Don't be silly. You can't do that."
-        let modal = document.querySelector('#result');
-        let span = document.querySelector('.close');
-        let content = document.querySelector('.modal-content').children[0]
-        content.innerText = 'Don\'t be silly. You can\'t do that.'
-        modal.style.display = "block"
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+        result(`Don't be silly. You can't do that`)
     }
-    lookat(){
+    lookAt(){
         // default modal "Pretty cool"
-        let modal = document.querySelector('#result');
-        let span = document.querySelector('.close');
-        let content = document.querySelector('.modal-content').children[0]
-        content.innerText = 'Pretty cool.'
-        modal.style.display = "block"
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+        result(`Pretty cool.`)
     }
     talkTo(){
         // default modal "You look ridiculous right now. You know that, right?"
-        let modal = document.querySelector('#result');
-        let span = document.querySelector('.close');
-        let content = document.querySelector('.modal-content').children[0]
-        content.innerText = 'You look ridiculous right now. You know that, right?'
-        modal.style.display = "block"
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+        result(`You look ridiculous. You know that, right?`)
     }
     grab(){
         // default modal "Careful now."
-        let modal = document.querySelector('#result');
-        let span = document.querySelector('.close');
-        let content = document.querySelector('.modal-content').children[0]
-        content.innerText = 'Careful now.'
-        modal.style.display = "block"
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+        result(`Careful now`)
     }
     drop(){
         // default modal "Don't be silly. You can't do that."
-        this.walkTo()
+        result(`Don't be silly. You can't do that`)
     }
     use(){
         // default modal "Don't be silly. You can't do that."
-        this.walkTo()
+        result(`Don't be silly. You can't do that`)
     }
 }
 // build out all possible inventory items
 // chewing gum (in inventory at start of game)
-// class Gum extends Item{
+// class Packofgum extends Item{
 //     constructor(name, inHand){
-        
+//         super(name, inHand)
 //     }
+//     lookAt()
 // }
-const leaf = new Item('leaf', false){
-    drop(){
-        console.log('Hey guy. What is up?')
-    }
-}
-leaf.drop()
+
+const leaf = new Item('leaf', false)
+leaf.walkTo()
 const reservation = new Item('Jackson Party of 2', false) // (invisible?)
 const jacket = new Item('jacket', false)
 const water = new Item('bottled water', false)
