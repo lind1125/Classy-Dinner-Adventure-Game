@@ -229,13 +229,13 @@ class chewedGum extends Item {
     
 
     //#### inventory object variables
-    const gumWad= new chewedGum('wad of chewed gum')
-    const gum = new Packofgum('pack of gum', true)
-    const leaf = new Leaf('leaf')
-    const jacket = new Jacket('jacket')
+    const gumWad= new chewedGum('wad of chewed gum', true)
+    const gum = new Packofgum('pack of gum', true) //only one that should start as true!
+    const leaf = new Leaf('leaf', true)
+    const jacket = new Jacket('jacket', true)
     const bottledWater = new Water('bottled water', true)
-    const sparklyLotion = new Lotion('sparkly lotion')
-    const dict = new Dictionary('French/English dictionary')
+    const sparklyLotion = new Lotion('sparkly lotion', true)
+    const dict = new Dictionary('French/English dictionary', true)
     
     
 // inventory array
@@ -281,19 +281,43 @@ const makeActive = (e) => {
     // }
     
 const getResults = (target) => {
-    console.log(target)
-    // console.log(lookBtn.classList.contains('selected'))
-    if (lookBtn.classList.contains('selected')) {
+    if (walkBtn.classList.contains('selected')) {
         for (i=0; i<inventory.length; i++){
             if (inventory[i].name === target.innerText) {
-                console.log(inventory[i].name)
+                inventory[i].walkTo()
+            }
+        }
+    }else if (lookBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
                 inventory[i].lookAt()
             }
         }
-    // gum.lookAt() 
-    console.log(target.innerText)
+    }else if (talkBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                inventory[i].talkTo()
+            }
+        }
+    } else if (grabBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                inventory[i].grab()
+            }
+        }
+    } else if (dropBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                inventory[i].drop()
+            }
+        }
+    } else if (useBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                inventory[i].use()
+            }
+        }
     }
-
 }
 
         // add event listeners to all interactive text that sets the clicked action to 'active'
