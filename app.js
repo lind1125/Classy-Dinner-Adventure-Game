@@ -85,6 +85,7 @@ class Packofgum extends Item {
     }
     use(){
         gumWad.inHand = true
+        console.log(gumWad.inHand)
         result('You experience a blast of freshness but, like most pleasures in life, it\'s sadly fleeting.')
     }
 }
@@ -229,29 +230,35 @@ class chewedGum extends Item {
     
 
     //#### inventory object variables
-    const gumWad= new chewedGum('wad of chewed gum', true)
+    const gumWad= new chewedGum('wad of chewed gum')
     const gum = new Packofgum('pack of gum', true) //only one that should start as true!
-    const leaf = new Leaf('leaf', true)
-    const jacket = new Jacket('jacket', true)
-    const bottledWater = new Water('bottled water', true)
-    const sparklyLotion = new Lotion('sparkly lotion', true)
-    const dict = new Dictionary('French/English dictionary', true)
+    const leaf = new Leaf('leaf')
+    const jacket = new Jacket('jacket')
+    const bottledWater = new Water('bottled water')
+    const sparklyLotion = new Lotion('sparkly lotion')
+    const dict = new Dictionary('French/English dictionary')
     
     
 // inventory array
 let inventory = [gum, gumWad, leaf, jacket, bottledWater, sparklyLotion, dict]
-
+// gum.use()
 // function to display inventory array items in the #inventory div
 const checkInventory = () => {
-    let inventoryList = document.querySelector('ul') 
+    let inventoryList = document.querySelector('ul')
+    while(inventoryList.firstChild){
+        inventoryList.removeChild(inventoryList.firstChild)
+    }
     for (let i=0; i < inventory.length; i++) {
-        if (inventory[i].inHand === true){
+        if (inventory[i].inHand === true) {
             const item = document.createElement('li')
             item.innerText = inventory[i].name
             item.classList.add('interactive')
             inventoryList.appendChild(item)
         }
     }
+    generateButtons()
+    // console.log(inventory)
+    // console.log(ulArr)
 }
 
 
@@ -275,6 +282,7 @@ const makeActive = (e) => {
     if (actionReady === true){
         getResults(e.target)
     }
+checkInventory()
 }
 // Use with function {
     // if use button is selected and an inventory button is selected display 'with' in display
@@ -330,5 +338,6 @@ const getResults = (target) => {
         
 document.addEventListener('DOMContentLoaded', ()=>{
     checkInventory()
-    generateButtons()  
+    generateButtons()
+ 
 })
