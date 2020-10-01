@@ -1,3 +1,29 @@
+// conditional variables for narrative scenarios
+let room = 'outside'
+let leafPile = false
+let manShouting = false
+let reservation = false
+let waiterPresent = false
+
+//#####
+// action display window
+let actionUpdate = document.querySelector('#action-display')
+let displayedAction = actionUpdate.children[0]
+let displayedTarget = actionUpdate.children[1]
+let displayedWith = document.querySelector('#displayed-with')
+let selectedWord = document.getElementsByClassName('selected')
+
+
+//actions container
+const clickableWords = document.getElementsByClassName('interactive')
+// action buttons
+const walkBtn = document.getElementById('walk-to')
+const lookBtn = document.getElementById('look-at')
+const talkBtn = document.getElementById('talk-to')
+const grabBtn = document.getElementById('grab')
+const dropBtn = document.getElementById('drop')
+const useBtn = document.getElementById('use')
+
 //results modal function (what pops up when you perform an action)
 const result = (text) => {
     let modal = document.querySelector('#result');
@@ -11,7 +37,7 @@ const result = (text) => {
 }
 
 
-// inventory items
+// #### inventory items
 class Item {
     constructor (name, inHand=false){
         this.name = name;
@@ -19,77 +45,214 @@ class Item {
     }
     walkTo(){
         // default modal "Don't be silly. You can't do that."
-        result(`Don't be silly. You can't do that`)
+        result('Don\'t be silly. You can\'t do that')
     }
     lookAt(){
         // default modal "Pretty cool"
-        result(`Pretty cool.`)
+        result('Pretty cool.')
     }
     talkTo(){
         // default modal "You look ridiculous right now. You know that, right?"
-        result(`You look ridiculous. You know that, right?`)
+        result('You look ridiculous. You know that, right?')
     }
     grab(){
         // default modal "Careful now."
-        result(`Careful now`)
+        if(this.inHand === true){
+            result('You already have it.')
+        }else result('Careful now.')
     }
     drop(){
         // default modal "Don't be silly. You can't do that."
-        result(`Don't be silly. You can't do that`)
+        result('Don\'t be silly. You can\'t do that')
     }
     use(){
         // default modal "Don't be silly. You can't do that."
-        result(`Don't be silly. You can't do that`)
+        result('Don\'t be silly. You can\'t do that')
     }
 }
 // build out all possible inventory items
 // chewing gum (in inventory at start of game)
-// class Packofgum extends Item{
-//     constructor(name, inHand){
-//         super(name, inHand)
-//     }
-//     lookAt()
-// }
-
-const leaf = new Item('leaf', false)
-leaf.walkTo()
-const reservation = new Item('Jackson Party of 2', false) // (invisible?)
-const jacket = new Item('jacket', false)
-const water = new Item('bottled water', false)
-const flour = new Item('flour', false) // (invisible?)
-const lotion = new Item('sparkly lotion', false)
-const dict = new Item('French/English dictionary', false)
-// inventory array
-let inventory = [gum, leaf, reservation, jacket, water, flour, lotion, dict]
-// action display window
-let actionUpdate = document.querySelector('#action-display')
-let displayedAction = actionUpdate.children[0]
-let displayedTarget = actionUpdate.children[1]
-
-//actions container
-const clickableWords = document.getElementsByClassName('interactive')
-// action buttons
-const walkBtn = document.getElementById('walk-to')
-const lookBtn = document.getElementById('look-at')
-const talkBtn = document.getElementById('talk-to')
-const grabBtn = document.getElementById('grab')
-const dropBtn = document.getElementById('drop')
-const useBtn = document.getElementById('use')
-
-// function to display inventory array items in the #inventory div
-const checkInventory = () => {
-    let inventoryList = document.querySelector('ul')
-
-    for (let i=0; i < inventory.length; i++) {
-        if (inventory[i].inHand === true){
-        const item = document.createElement('li')
-        item.innerText = inventory[i].name
-        item.classList.add('interactive')
-        inventoryList.appendChild(item)
+class Packofgum extends Item {
+    constructor(name, inHand){
+        super(name, inHand)
+    }
+    lookAt(){
+        result('A full pack of unchewed gum. A lot of potential here.')
+    }
+    drop(){
+        result('Hey, you paid good money for this!')
+    }
+    use(){
+        gumWad.inHand = true
+        result('You experience a blast of freshness but, like most pleasures in life, it\'s sadly fleeting.')
+    }
+}
+//build chewed gum subclass
+class chewedGum extends Item {
+    constructor(name, inHand){
+        super(name, inHand)
+    }
+        lookAt(){
+            result('A sticky wad of gum.')
+        }
+        drop(){
+            result('With great effort, you peel it off your palm. This stuff is like super glue!')
+        }
+        use(){
+            
+        }
+    }  
+    //build Leaf subclass
+    class Leaf extends Item {
+        constructor(name, inHand, isSticky=false){
+            super(name, inHand)
+            this.isSticky = isSticky
+        }
+        // walkTo(){}
+        lookAt(){
+            result('It\'s a leaf.')
+        }
+        // talkTo(){}
+        grab(){
+            this.inHand = true
+            result('You pick up the leaf.')
+        }
+        drop(){
+            this.inHand = false
+            if (this.isSticky === true){
+                result('It plummets to the ground with a splat.')
+            } else {
+                result('It floats away on the wind.')
+            }
+        }
+        // use(){
+            //if with element is gumWad, isSticky becomes true and  this.name becomes "sticky leaf" 
+        // }
+    }
+    // jacket subClass
+    class Jacket extends Item {
+        constructor(name, inHand){
+            super(name, inHand)
+        }
+        grab(){
+            this.inHand = false
+            result('You remove the jacket.')
+        }
+        drop(){
+            this.inHand = false
+            result('You remove the jacket.')
+        }
+        use(){
+            this.inHand = false
+            result('You remove the jacket.')
         }
     }
-    console.log(inventoryList)
+    //build water subclass
+    class Water extends Item {
+        constructor(name, inHand, isSparkly = false){
+            super(name, inHand)
+            this.isSparkly = isSparkly
+        }
+        // walkTo(){}
+        lookAt(){
+            return('Eau de Mediocre: A working-class flat water packaged in a 1\% bottle')
+        }
+        // talkTo(){}
+        grab(){
+            if (jacket.inHand === true){
+                this.inHand = true
+                result('You pick up a bottle of water.')
+            } else {
+                result('The chef looks up. \"Hey, get away from there! This area is staff only.\" He shuffles you back to your table.')
+            }
+        }
+        drop(){
+            result('Hey, you would have paid good money for this!')
+        }
+        // use(){
+            //if (with element is lotion) {
+                // isSparkly becomes true and this.name becomes "sparkling water"
+            // } else if (with element is bathroomAttendant and isSparkly is true) {
+            //     this.inHand = false
+            //     dict.inHand = true
+            //     result('The attendant nods appreciately. Now, THIS is a classy beverage. Cheers, mate. Enjoy the book.')
+            // }
+            // else {
+            //     result('Refreshing!')
+            // }
+            // }
+        }
+        
+        //build lotion subclass
+        class Lotion extends Item {
+            constructor(name, inHand){
+                super(name, inHand)
+            }
+            // walkTo(){}
+            // lookAt(){}
+            // talkTo(){}
+            grab(){
+                this.inHand = true
+                result('\"Hey, look over there!\" you shout. The woman turns for a moment, and you swipe the bottle of lotion. When she turns back, she furrows her brow for a moment, shrugs, and pulls another bottle of lotion out of her bag.')
+            }
+            drop(){
+                result('Hey, you would have paid good money for this!')
+            }
+            // use(){
+                //if with element is water, run water.use()
+                // } else {
+                //     result('Your skin is absolutely GLOWING, and you make a mental note to work on your skincare routine.')
+                // }
+        }
+    
+    //build dict subclass
+    class Dictionary extends Item {
+        constructor(name, inHand){
+            super(name, inHand)
+        }
+        // walkTo(){}
+        lookAt(){
+            result('\"Learn French on the Toilet\" by Jacques Cologne.')
+        }
+        // talkTo(){}
+        // grab(){}
+        drop(){
+            result('After all that?!')
+        }
+        // use(){
+            // if location equals table and waiter equals present, run win function
+        // } else {
+            // result('Oh, is THAT what that word means? No wonder they were so mad.')
+        // }
+    }
+    
+
+    //#### inventory object variables
+    const gumWad= new chewedGum('wad of chewed gum')
+    const gum = new Packofgum('pack of gum', true)
+    const leaf = new Leaf('leaf')
+    const jacket = new Jacket('jacket')
+    const bottledWater = new Water('bottled water')
+    const sparklyLotion = new Lotion('sparkly lotion')
+    const dict = new Dictionary('French/English dictionary')
+    
+    
+// inventory array
+let inventory = [gum, gumWad, leaf, jacket, bottledWater, sparklyLotion, dict]
+console.log(inventory)
+// function to display inventory array items in the #inventory div
+const checkInventory = () => {
+    let inventoryList = document.querySelector('ul') 
+    for (let i=0; i < inventory.length; i++) {
+        if (inventory[i].inHand === true){
+            const item = document.createElement('li')
+            item.innerText = inventory[i].name
+            item.classList.add('interactive')
+            inventoryList.appendChild(item)
+        }
+    }
 }
+
 
 // add event listeners to all interactive text that sets the clicked action to 'active'
 const generateButtons = () => {
@@ -97,7 +260,6 @@ const generateButtons = () => {
         clickableWords[i].addEventListener('click', makeActive)
     }
 }
-
 const makeActive = (e) => {
     //highlight selected text
         e.target.classList.toggle('selected')
@@ -113,8 +275,18 @@ const makeActive = (e) => {
         displayedAction.innerText = ''
         displayedTarget.innerText = ''
     }
+    actions()
 }
 
+// Use with function {
+// if use button is selected and an inventory button is selected display 'with' in display
+// }
+
+const actions = () => {
+    if (walkBtn.classList.contains('selected')){
+
+    }
+}
 
 document.addEventListener('DOMContentLoaded', ()=>{
     checkInventory()

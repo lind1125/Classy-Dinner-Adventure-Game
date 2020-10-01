@@ -24,6 +24,10 @@ body {
     /* border: 2px solid black; */
 }
 
+#displayed-with {
+    display: none;
+}
+
 section {
     margin: 10px auto;
     width: 60%;
