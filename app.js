@@ -1,5 +1,6 @@
 // conditional variables for narrative scenarios
 let room = 'outside'
+let actionReady = false
 let leafPile = false
 let manShouting = false
 let reservation = false
@@ -155,7 +156,7 @@ class chewedGum extends Item {
         }
         // walkTo(){}
         lookAt(){
-            return('Eau de Mediocre: A working-class flat water packaged in a 1\% bottle')
+            result('Eau de Mediocre: A working-class flat water packaged in a 1\% bottle')
         }
         // talkTo(){}
         grab(){
@@ -232,14 +233,14 @@ class chewedGum extends Item {
     const gum = new Packofgum('pack of gum', true)
     const leaf = new Leaf('leaf')
     const jacket = new Jacket('jacket')
-    const bottledWater = new Water('bottled water')
+    const bottledWater = new Water('bottled water', true)
     const sparklyLotion = new Lotion('sparkly lotion')
     const dict = new Dictionary('French/English dictionary')
     
     
 // inventory array
 let inventory = [gum, gumWad, leaf, jacket, bottledWater, sparklyLotion, dict]
-console.log(inventory)
+
 // function to display inventory array items in the #inventory div
 const checkInventory = () => {
     let inventoryList = document.querySelector('ul') 
@@ -254,40 +255,55 @@ const checkInventory = () => {
 }
 
 
-// add event listeners to all interactive text that sets the clicked action to 'active'
-const generateButtons = () => {
-    for(i=0; i<clickableWords.length; i++) {
-        clickableWords[i].addEventListener('click', makeActive)
-    }
-}
 const makeActive = (e) => {
     //highlight selected text
-        e.target.classList.toggle('selected')
+    e.target.classList.toggle('selected')
     // add it to the display window
     let displayText = e.target.innerText
     if (e.target.classList.contains('selected')){
         if (e.target.classList.contains('action')) {
             displayedAction.innerText = displayText
+            actionReady = true
         }else {
             displayedTarget.innerText = displayText
         }
     }else {
+        actionReady = false
         displayedAction.innerText = ''
         displayedTarget.innerText = ''
     }
-    actions()
-}
-
-// Use with function {
-// if use button is selected and an inventory button is selected display 'with' in display
-// }
-
-const actions = () => {
-    if (walkBtn.classList.contains('selected')){
-
+    if (actionReady === true){
+        getResults(e.target)
     }
 }
+// Use with function {
+    // if use button is selected and an inventory button is selected display 'with' in display
+    // }
+    
+const getResults = (target) => {
+    console.log(target)
+    // console.log(lookBtn.classList.contains('selected'))
+    if (lookBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                console.log(inventory[i].name)
+                inventory[i].lookAt()
+            }
+        }
+    // gum.lookAt() 
+    console.log(target.innerText)
+    }
 
+}
+
+        // add event listeners to all interactive text that sets the clicked action to 'active'
+        const generateButtons = () => {
+            for(i=0; i<clickableWords.length; i++) {
+                clickableWords[i].addEventListener('click', makeActive)
+                // clickableWords[i].addEventListener('click', getResults)
+            }
+        }
+        
 document.addEventListener('DOMContentLoaded', ()=>{
     checkInventory()
     generateButtons()  
