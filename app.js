@@ -5,7 +5,7 @@ let leafPile = false
 let manShouting = false
 let reservation = false
 let waiterPresent = false
-let target1 = ''
+let usedItems = []
 
 //#####
 // action display window
@@ -17,8 +17,10 @@ let displayedWith = document.querySelector('#displayed-with')
 
 
 const clickableWords = document.getElementsByClassName('interactive')
+const actionTargets = document.getElementsByClassName('target')
 const selectedTargets = document.getElementsByClassName('target selected')
 const selectedActions = document.getElementsByClassName('action selected')
+console.log(actionTargets)
 // action buttons
 const walkBtn = document.getElementById('walk-to')
 const lookBtn = document.getElementById('look-at')
@@ -36,20 +38,26 @@ const result = (text) => {
     modal.style.display = "block"
     span.onclick = function() {
         modal.style.display = "none";
-        selectedActions[0].classList.remove('selected')
-        selectedTargets[0].classList.remove('selected')
+        // selectedActions[0].classList.remove('selected')
+        if (selectedActions.length > 0){
+            selectedActions[0].classList.remove('selected')
+        }
+        // selectedTargets[0].classList.remove('selected')
+        while(selectedTargets.length > 0){
+            selectedTargets[0].classList.remove('selected')
+        }
         actionReady = false
         displayedAction.innerText = ''
         displayedTarget.innerText = ''
         displayedWith.style.display = 'none'
-        target1 = ''
+        usedItems = []
     }
 }
 
 
 // #### inventory items
 class Item {
-    constructor (name, inHand=false){
+    constructor (name, inHand=true){
         this.name = name;
         this.inHand = inHand;
     }
@@ -95,8 +103,8 @@ class Packofgum extends Item {
     use(){
         gumWad.inHand = true
         console.log(gumWad.inHand)
-        result('You experience a blast of freshness but, like most pleasures in life, it\'s sadly fleeting.')
-        displayInventory()
+        result('You experience a wave of minty freshness that is, like most pleasures in life, sadly fleeting.')
+        updateInventory()
     }
 }
 //build chewed gum subclass
@@ -108,12 +116,24 @@ class chewedGum extends Item {
             result('A sticky wad of gum.')
         }
         drop(){
+            this.inHand = false
             result('With great effort, you peel it off your palm. This stuff is like super glue!')
+            updateInventory()
         }
         use(){
-            console.log(target1)
-        }
-    }  
+            console.log(actionReady)
+            if(usedItems[0].innerText === 'leaf'){
+                this.inHand = false
+                leaf.isSticky = true
+                leaf.name = 'sticky leaf'
+                result('You shove a big wad of gum onto one side of the leaf, ruining its exquisite natural beauty. You monster.')
+                updateInventory()
+            } else {
+                super.use()
+            }
+    }
+}
+
     //build Leaf subclass
     class Leaf extends Item {
         constructor(name, inHand, isSticky=false){
@@ -136,10 +156,20 @@ class chewedGum extends Item {
             } else {
                 result('It floats away on the wind.')
             }
+            updateInventory()
         }
-        // use(){
-            //if with element is gumWad, isSticky becomes true and  this.name becomes "sticky leaf" 
-        // }
+        use(){
+            console.log(actionReady)
+            if(usedItems[0].innerText === 'wad of chewed gum'){
+                gumWad.inHand = false
+                this.isSticky = true
+                this.name = 'sticky leaf'
+                result('You shove a big wad of gum onto one side of the leaf, ruining its exquisite natural beauty. You monster.')
+                updateInventory()
+            }else { 
+                super.use() 
+            }
+        }
     }
     // jacket subClass
     class Jacket extends Item {
@@ -149,14 +179,17 @@ class chewedGum extends Item {
         grab(){
             this.inHand = false
             result('You remove the jacket.')
+            updateInventory()
         }
         drop(){
             this.inHand = false
             result('You remove the jacket.')
+            updateInventory()
         }
         use(){
             this.inHand = false
             result('You remove the jacket.')
+            updateInventory()
         }
     }
     //build water subclass
@@ -174,6 +207,7 @@ class chewedGum extends Item {
             if (jacket.inHand === true){
                 this.inHand = true
                 result('You pick up a bottle of water.')
+                updateInventory()
             } else {
                 result('The chef looks up. \"Hey, get away from there! This area is staff only.\" He shuffles you back to your table.')
             }
@@ -206,6 +240,7 @@ class chewedGum extends Item {
             grab(){
                 this.inHand = true
                 result('\"Hey, look over there!\" you shout. The woman turns for a moment, and you swipe the bottle of lotion. When she turns back, she furrows her brow for a moment, shrugs, and pulls another bottle of lotion out of her bag.')
+                updateInventory()
             }
             drop(){
                 result('No way! You would have paid good money for this!')
@@ -240,7 +275,7 @@ class chewedGum extends Item {
     
 
 //#### inventory object variables
-const gumWad= new chewedGum('wad of chewed gum')
+const gumWad= new chewedGum('wad of chewed gum', false)
 const gum = new Packofgum('pack of gum', true) //only one that should start as true!
 const leaf = new Leaf('leaf',)
 const jacket = new Jacket('jacket')
@@ -253,15 +288,13 @@ const dict = new Dictionary('French/English dictionary')
 let inventory = [gum, gumWad, leaf, jacket, bottledWater, sparklyLotion, dict]
 let inHandArr = []
 let inventoryList = document.querySelector('#inventory-list')
-// gum.use()
+
 // function to display inventory array items in the #inventory div
-const displayInventory = () => {
-    
+const displayInventory = () => {   
     for (i=0; i<inventory.length; i++) {
         const item = document.createElement('li')
-        // console.log(inHandArr)
-        // console.log(inHandArr.length)
         item.innerText = inventory[i].name
+        item.setAttribute('id', `${inventory[i].name}`)
         item.classList.add('interactive')
         item.classList.add('target')
         if (inventory[i].inHand === false) {
@@ -270,25 +303,39 @@ const displayInventory = () => {
         
         inventoryList.appendChild(item)
     }
-    // console.log(inHandArr[i].name)
-    // console.log(inventory)
+}
+
+//function to clear old inventory
+const updateInventory = () => {
+    while (inventoryList.firstElementChild){
+        inventoryList.removeChild(inventoryList.firstElementChild)
+    }
+    displayInventory()
 }
     
 const generateButtons = () => {
     for(i=0; i<clickableWords.length; i++) {
         clickableWords[i].addEventListener('click', makeActive)
-        // clickableWords[i].addEventListener('click', getResults)
+    }
+    for(i=0; i<actionTargets.length; i++){
+        actionTargets[i].addEventListener('click', useWith)
+    }
+}
+
+const useWith = (e) => {
+    if (e.target.classList.contains('selected')){
+        usedItems.push(e.target)
     }
 }
 
 const makeActive = (e) => {
-    console.log(e.target)
     if (e.target.classList.contains('action')){
         if (selectedActions.length > 0){
             selectedActions[0].classList.remove('selected')
         }
-    } else if (e.target.classList.contains('target')){
-    if (selectedTargets.length > 0){
+    } 
+    else if (e.target.classList.contains('target')){
+        if (selectedTargets.length > 0){
             selectedTargets[0].classList.remove('selected')
         }
     }
@@ -304,16 +351,15 @@ const makeActive = (e) => {
             displayedAction.innerText = displayText
             actionReady = true
         }else if (e.target.classList.contains('target')){
-            target1 = displayText
             displayedTarget.innerText = displayText
         }
     }
-        if (actionReady === true){
-            getResults(e.target)
-        }
-        // createInventory()
+    if (actionReady === true){
+        // firstUsedItem = displayText
+        // console.log(firstUsedItem)
+        getResults(e.target)
+    }
 }
-
 
 
 const getResults = (target) => {
