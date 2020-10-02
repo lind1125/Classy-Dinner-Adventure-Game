@@ -5,6 +5,7 @@ let leafPile = false
 let manShouting = false
 let reservation = false
 let waiterPresent = false
+let target1 = ''
 
 //#####
 // action display window
@@ -35,6 +36,13 @@ const result = (text) => {
     modal.style.display = "block"
     span.onclick = function() {
         modal.style.display = "none";
+        selectedActions[0].classList.remove('selected')
+        selectedTargets[0].classList.remove('selected')
+        actionReady = false
+        displayedAction.innerText = ''
+        displayedTarget.innerText = ''
+        displayedWith.style.display = 'none'
+        target1 = ''
     }
 }
 
@@ -82,12 +90,13 @@ class Packofgum extends Item {
         result('A full pack of unchewed gum. A lot of potential here.')
     }
     drop(){
-        result('Hey, you paid good money for this!')
+        result('No way! You paid good money for this!')
     }
     use(){
         gumWad.inHand = true
         console.log(gumWad.inHand)
         result('You experience a blast of freshness but, like most pleasures in life, it\'s sadly fleeting.')
+        displayInventory()
     }
 }
 //build chewed gum subclass
@@ -102,7 +111,7 @@ class chewedGum extends Item {
             result('With great effort, you peel it off your palm. This stuff is like super glue!')
         }
         use(){
-            
+            console.log(target1)
         }
     }  
     //build Leaf subclass
@@ -170,7 +179,7 @@ class chewedGum extends Item {
             }
         }
         drop(){
-            result('Hey, you would have paid good money for this!')
+            result('No way! You would have paid good money for this!')
         }
         // use(){
             //if (with element is lotion) {
@@ -199,7 +208,7 @@ class chewedGum extends Item {
                 result('\"Hey, look over there!\" you shout. The woman turns for a moment, and you swipe the bottle of lotion. When she turns back, she furrows her brow for a moment, shrugs, and pulls another bottle of lotion out of her bag.')
             }
             drop(){
-                result('Hey, you would have paid good money for this!')
+                result('No way! You would have paid good money for this!')
             }
             // use(){
                 //if with element is water, run water.use()
@@ -233,7 +242,7 @@ class chewedGum extends Item {
 //#### inventory object variables
 const gumWad= new chewedGum('wad of chewed gum')
 const gum = new Packofgum('pack of gum', true) //only one that should start as true!
-const leaf = new Leaf('leaf', true)
+const leaf = new Leaf('leaf',)
 const jacket = new Jacket('jacket')
 const bottledWater = new Water('bottled water')
 const sparklyLotion = new Lotion('sparkly lotion')
@@ -243,50 +252,37 @@ const dict = new Dictionary('French/English dictionary')
 // inventory array
 let inventory = [gum, gumWad, leaf, jacket, bottledWater, sparklyLotion, dict]
 let inHandArr = []
-let inventoryList = document.querySelector('ul')
+let inventoryList = document.querySelector('#inventory-list')
 // gum.use()
 // function to display inventory array items in the #inventory div
-// determine what inventory array items have an inHand value of true
-// take those items and populate the inventoryList ul
-const createInventory = () => {
-    for (let i=0; i < inventory.length; i++) {
-        if (inventory[i].inHand === true) {
-            inHandArr.push(inventory[i])
-        }
-    }
-}
-
 const displayInventory = () => {
-    for (i=0; i<inHandArr.length; i++) {
+    
+    for (i=0; i<inventory.length; i++) {
         const item = document.createElement('li')
-        console.log(inHandArr)
+        // console.log(inHandArr)
         // console.log(inHandArr.length)
-        item.innerText = inHandArr[i].name
+        item.innerText = inventory[i].name
         item.classList.add('interactive')
         item.classList.add('target')
+        if (inventory[i].inHand === false) {
+            item.style.display = 'none'
+        } else {item.style.display = 'block'}
+        
         inventoryList.appendChild(item)
     }
     // console.log(inHandArr[i].name)
     // console.log(inventory)
 }
-
-
-// Use with function {
-    // if use button is selected and an inventory button is selected display 'with' in display
-    // }
-    // add event listeners to all interactive text that sets the clicked action to 'active'
     
-    const generateButtons = () => {
-        for(i=0; i<clickableWords.length; i++) {
-            clickableWords[i].addEventListener('click', makeActive)
-            // clickableWords[i].addEventListener('click', getResults)
-        }
+const generateButtons = () => {
+    for(i=0; i<clickableWords.length; i++) {
+        clickableWords[i].addEventListener('click', makeActive)
+        // clickableWords[i].addEventListener('click', getResults)
     }
-    
+}
+
 const makeActive = (e) => {
-    console.log('OK HERE')
-    console.log(selectedActions)
-    console.log(selectedTargets)
+    console.log(e.target)
     if (e.target.classList.contains('action')){
         if (selectedActions.length > 0){
             selectedActions[0].classList.remove('selected')
@@ -298,7 +294,9 @@ const makeActive = (e) => {
     }
     //highlight selected text
     e.target.classList.toggle('selected')
-    // console.log(selectedActions)
+    if (e.target === useBtn){
+        displayedWith.style.display = 'block'
+    }
     // add it to the display window
     let displayText = e.target.innerText
     if (e.target.classList.contains('selected')){
@@ -306,37 +304,32 @@ const makeActive = (e) => {
             displayedAction.innerText = displayText
             actionReady = true
         }else if (e.target.classList.contains('target')){
+            target1 = displayText
             displayedTarget.innerText = displayText
         }
     }
-//     }else {
-//         actionReady = false
-//         displayedAction.innerText = ''
-//         displayedTarget.innerText = ''
-    
-    console.log(actionReady)
-    if (actionReady === true){
-        getResults(e.target)
-    }
-    createInventory()
+        if (actionReady === true){
+            getResults(e.target)
+        }
+        // createInventory()
 }
 
-``
 
-    const getResults = (target) => {
-        console.log(target.innerText)
-        if (walkBtn.classList.contains('selected')) {
-            for (i=0; i<inventory.length; i++){
-                if (inventory[i].name === target.innerText) {
-                    inventory[i].walkTo()
-                }
-            }
-        }else if (lookBtn.classList.contains('selected')) {
-            for (i=0; i<inventory.length; i++){
-                if (inventory[i].name === target.innerText) {
-                    inventory[i].lookAt()
+
+const getResults = (target) => {
+    // console.log(target.innerText)
+    if (walkBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                inventory[i].walkTo()
             }
         }
+    }else if (lookBtn.classList.contains('selected')) {
+        for (i=0; i<inventory.length; i++){
+            if (inventory[i].name === target.innerText) {
+                inventory[i].lookAt()
+        }
+    }
     }else if (talkBtn.classList.contains('selected')) {
         for (i=0; i<inventory.length; i++){
             if (inventory[i].name === target.innerText) {
@@ -365,12 +358,11 @@ const makeActive = (e) => {
 }
 
 const gameLoop = () => {
-    generateButtons(
-    // displayInventory()
-    )
+    generateButtons()
+        // displayInventory()
 }   
 document.addEventListener('DOMContentLoaded', ()=>{
-    createInventory()
+    // createInventory()
     displayInventory()
     setInterval(gameLoop, 60)
 })
