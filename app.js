@@ -16,7 +16,8 @@ let displayedWith = document.querySelector('#displayed-with')
 
 
 const clickableWords = document.getElementsByClassName('interactive')
-const selectedWords = document.getElementsByClassName('selected')
+const selectedTargets = document.getElementsByClassName('target selected')
+const selectedActions = document.getElementsByClassName('action selected')
 // action buttons
 const walkBtn = document.getElementById('walk-to')
 const lookBtn = document.getElementById('look-at')
@@ -229,14 +230,14 @@ class chewedGum extends Item {
     }
     
 
-    //#### inventory object variables
-    const gumWad= new chewedGum('wad of chewed gum')
-    const gum = new Packofgum('pack of gum', true) //only one that should start as true!
-    const leaf = new Leaf('leaf')
-    const jacket = new Jacket('jacket')
-    const bottledWater = new Water('bottled water')
-    const sparklyLotion = new Lotion('sparkly lotion')
-    const dict = new Dictionary('French/English dictionary')
+//#### inventory object variables
+const gumWad= new chewedGum('wad of chewed gum')
+const gum = new Packofgum('pack of gum', true) //only one that should start as true!
+const leaf = new Leaf('leaf', true)
+const jacket = new Jacket('jacket')
+const bottledWater = new Water('bottled water')
+const sparklyLotion = new Lotion('sparkly lotion')
+const dict = new Dictionary('French/English dictionary')
     
     
 // inventory array
@@ -249,8 +250,6 @@ let inventoryList = document.querySelector('ul')
 // take those items and populate the inventoryList ul
 const createInventory = () => {
     for (let i=0; i < inventory.length; i++) {
-        console.log('--------')
-        console.log('i = '+i)
         if (inventory[i].inHand === true) {
             inHandArr.push(inventory[i])
         }
@@ -258,13 +257,14 @@ const createInventory = () => {
 }
 
 const displayInventory = () => {
-    const item = document.createElement('li')
     for (i=0; i<inHandArr.length; i++) {
-    console.log(inHandArr)
-    console.log(inHandArr.length)
-    item.innerText = inHandArr[i].name
-    item.classList.add('interactive')
-    inventoryList.appendChild(item)
+        const item = document.createElement('li')
+        console.log(inHandArr)
+        // console.log(inHandArr.length)
+        item.innerText = inHandArr[i].name
+        item.classList.add('interactive')
+        item.classList.add('target')
+        inventoryList.appendChild(item)
     }
     // console.log(inHandArr[i].name)
     // console.log(inventory)
@@ -283,33 +283,45 @@ const displayInventory = () => {
         }
     }
     
-    const makeActive = (e) => {
-        //highlight selected text
-        e.target.classList.toggle('selected')
-
-        // add it to the display window
-        let displayText = e.target.innerText
-        if (e.target.classList.contains('selected')){
-            if (e.target.classList.contains('action')) {
-                displayedAction.innerText = displayText
-                actionReady = true
-            }else {
-                displayedTarget.innerText = displayText
-            }
-        }else {
-            if (selectedWords.length > -1){
-                    selectedWords[0].classList.remove('selected')
-                }
-                actionReady = false
-                displayedAction.innerText = ''
-                displayedTarget.innerText = ''
-            }
-            if (actionReady === true){
-                getResults(e.target)
-            }
-            createInventory()
-    
+const makeActive = (e) => {
+    console.log('OK HERE')
+    console.log(selectedActions)
+    console.log(selectedTargets)
+    if (e.target.classList.contains('action')){
+        if (selectedActions.length > 0){
+            selectedActions[0].classList.remove('selected')
         }
+    } else if (e.target.classList.contains('target')){
+    if (selectedTargets.length > 0){
+            selectedTargets[0].classList.remove('selected')
+        }
+    }
+    //highlight selected text
+    e.target.classList.toggle('selected')
+    // console.log(selectedActions)
+    // add it to the display window
+    let displayText = e.target.innerText
+    if (e.target.classList.contains('selected')){
+        if (e.target.classList.contains('action')){
+            displayedAction.innerText = displayText
+            actionReady = true
+        }else if (e.target.classList.contains('target')){
+            displayedTarget.innerText = displayText
+        }
+    }
+//     }else {
+//         actionReady = false
+//         displayedAction.innerText = ''
+//         displayedTarget.innerText = ''
+    
+    console.log(actionReady)
+    if (actionReady === true){
+        getResults(e.target)
+    }
+    createInventory()
+}
+
+``
 
     const getResults = (target) => {
         console.log(target.innerText)
