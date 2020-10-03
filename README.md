@@ -28,7 +28,7 @@ I first created a puzzle dependency chart to nail down what actions should be ta
 I then created a couple of rough wireframes, ultimately combining layout concepts from the two.
 
 #### Wireframe
-<img src="./process_materials/wireframe.jpg" height="75%" width="75%>
+<img src="./process_materials/wireframe.jpg" height="75%" width="75%" >
 
 I then built out the interactive inventory objects and the first "room" in order to have a sandbox to figure out the necessary functions for the game to take in input and execute properly.
 
