@@ -42,7 +42,7 @@ const result = (text) => {
     clear()
   };
 };
-
+//clears any changes from selecting an interactive element
 clear = () => {
     if (selectedActions.length > 0) {
         selectedActions[0].classList.remove('selected');
@@ -57,7 +57,7 @@ clear = () => {
       usedItems = [];
 }
 
-// #### inventory items
+// #### Super class for interactive items
 class Item {
   constructor(name, inHand = false) {
     this.name = name;
@@ -91,7 +91,7 @@ class Item {
   }
 }
 
-//build out all 'in-world' targets
+// ### 'in-world' targets
 
 // ROOM 1
 // front door
@@ -223,7 +223,7 @@ class Menu extends Item {
                 result(
                 'After several desperate flips of the pages of the dictionary, you successfully order off the menu! The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
                 );
-                // gameOver()
+                gameOver()
             } else {
                 result('Using an accent that is, at best, cartoonish and is, at worst, extremely offensive, you attempt to read from the menu. The server does not hide their disgust and walks away in a huff.')
             }
@@ -349,7 +349,8 @@ class Attendant extends Item {
     }
 }
 
-// Inventory items
+// ### Inventory items
+
 //ROOM 1
 // chewing gum (in inventory at start of game)
 class PackOfGum extends Item {
@@ -552,7 +553,7 @@ class Dictionary extends Item {
             result(
             'After several desperate flips of the pages of the dictionary, you successfully order off the menu! The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
             );
-            // gameOver()(){
+            gameOver(){
         } else {
         result('Oh, is THAT what that word means? No wonder they were so mad.')
         }
@@ -611,7 +612,7 @@ let interactiveTargets = [
 let inHandArr = [];
 let inventoryList = document.querySelector('#inventory-list');
 
-//functions to set leafblower conditions
+//functions to set leafblower conditions (stretch goal: set timing functions so that leaf blowing events begin and end after a certain time once leafPile is toggled to true)
 startBlowing = () => {
     result('The wielder of the leaf blower takes a quick, sharp breath and stands. They pull the ripcord on the leaf blower, and you are hit with a wall of sound as they begin their task. It\'s like standing next to a foghorn. The well-dressed person on the phone appears to be struggling to be heard.')
 }
@@ -653,13 +654,14 @@ const generateButtons = () => {
     actionTargets[i].addEventListener('click', useWith);
   }
 };
-
+//pushes items to usedItems array to determine which use() method to run
 const useWith = (e) => {
   if (e.target.classList.contains('selected')) {
     usedItems.push(e.target);
   }
 };
 
+//set behavior for all interactive elements
 const makeActive = (e) => {
   if (e.target.classList.contains('action')) {
     if (selectedActions.length > 0) {
@@ -689,7 +691,7 @@ const makeActive = (e) => {
     getResults(e.target);
   }
 };
-
+// determine which action has been selected and which method to run in the selected interactive target
 const getResults = (target) => {
   if (walkBtn.classList.contains('selected')) {
     for (i = 0; i < interactiveTargets.length; i++) {
@@ -730,6 +732,7 @@ const getResults = (target) => {
   }
 };
 
+// switch over to second part of game inside restaurant
 changeRooms = () => {
         gum.inHand = false
         gumWad.inHand = false
@@ -741,6 +744,7 @@ changeRooms = () => {
         clear()
     }
 
+  //win modal and resets. Needs further debugging to confirm all booleans are reset
 const gameOver = () => {
     clear()
     room4.style.display = 'none'
@@ -750,6 +754,7 @@ const gameOver = () => {
     result('You did it! You ate a classy dinner! But at what cost?\nSpeaking of cost...how are you going to pay for this?')
 }
 
+//loop to make sure all interactive objects will function whenever the DOM is updated
 const gameLoop = () => {
   generateButtons();
 };
