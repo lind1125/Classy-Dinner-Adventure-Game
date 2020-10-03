@@ -1,6 +1,6 @@
 # SEI Project 1: "Classy Dinner Adventure"
 
-### Demo: https://lind1125.github.io/SEI_project1/
+### Demo: https://lind1125.github.io/Classy-Dinner-Adventure-Game/
 
 ---
 
@@ -58,4 +58,4 @@ I had a very rough time getting the clickable items to behave correctly. First i
 * Modal box code modified from [W3 Schools](https://www.w3schools.com/howto/howto_css_modals.asp)
 
 
-### Demo: https://lind1125.github.io/SEI_project1/
+### Demo: https://lind1125.github.io/Classy-Dinner-Adventure-Game/
