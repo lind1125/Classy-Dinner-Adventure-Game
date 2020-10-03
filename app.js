@@ -3,13 +3,14 @@ let actionReady = false;
 let leafPile = false;
 let leafStuck = false;
 let reservation = false;
-let waiterPresent = false;
 let usedItems = [];
 
 //#####
 // display window stuff
 let room1 = document.querySelector('#room1')
 let room2 = document.querySelector('#room2')
+let room3 = document.querySelector('#room3')
+let room4 = document.querySelector('#room4')
 let actionUpdate = document.querySelector("#action-display");
 let displayedAction = actionUpdate.children[0];
 let displayedTarget = actionUpdate.children[1];
@@ -89,6 +90,8 @@ class Item {
 }
 
 //build out all "in-world" targets
+
+// ROOM 1
 // front door
 class Door extends Item {
   constructor(name) {
@@ -186,120 +189,208 @@ class PhoneTalker extends Item {
         this.walkTo()
     }
 }
+//ROOM 2
+//table
+class Table extends Item {
+    constructor(name){
+        super(name)
+    }
+    walkTo(){
+        if (room2.style.display === 'block'){
+            result('You\'re already there.')
+        } else {
+            room2.style.display === 'block'
+        }
+    }
+}
+//menu
+class Menu extends Item {
+    constructor(name){
+        super(name)
 
-// build out all possible inventory items
+    }
+    // walkTo(){}
+    lookAt(){
+        result('An exquisite selection of the finest French cuisine this city has to offer...or so you assume. You can\'t read a word of it! It\'s entirely in French.')
+    }
+    // talkTo(){}
+    // grab(){}
+    // drop(){}
+    // use(){}
+}
+//server
+class Server extends Item {
+    constructor(name){
+        super(name)
+        this.isPresent = false
+
+    }
+    walkTo(){
+        if (this.isPresent === false){
+            result('They manage to stay ahead of you just enough to justify ignoring you. You return to you table.')
+        } else {
+            result('They\'re standing right next to you.')
+        }
+    }
+    lookAt(){
+        result('You note with some embarassment that they are wearing nearly the exact same clothes that you came in with.')
+    }
+    talkTo(){
+        if (this.isPresent === false){
+            result('The server comes over and gives what could either be a curt smile or an involuntary facial tic.')
+        } else {
+            result('The server waits expectantly, glancing very deliberately at the menu.')
+        }
+    }
+    use(){
+        if (usedItems[0].innerText === "menu") {
+            if (dict.inHand === true){
+                result(
+                'After several desperate flips of the pages of the dictionary, you successfully order off the menu. The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
+                );
+                // gameOver()
+            } else {
+                result('Using an accent that is, at best, cartoonish and is, at worst, extremely offensive, you attempt to read from the menu. The server does not hide their disgust and walks away in a huff.')
+            }
+        } else {
+            super.use();
+        }
+    }
+}
+
+// kitchen
+class Kitchen extends Item {
+    constructor(name, inHand){
+        super(name, inHand)
+    }
+    // walkTo(){}
+    // lookAt(){}
+    // talkTo(){}
+    // grab(){}
+    // drop(){}
+    // use(){}
+}
+//restroom
+class Restroom extends Item {
+    constructor(name, inHand){
+        super(name, inHand)
+    }
+    // walkTo(){}
+    // lookAt(){}
+    // talkTo(){}
+    // grab(){}
+    // drop(){}
+    // use(){}
+}
+// Inventory items
+//ROOM 1
 // chewing gum (in inventory at start of game)
 class PackOfGum extends Item {
-  constructor(name, inHand) {
-    super(name, inHand);
-  }
-  lookAt() {
-    result("A full pack of unchewed gum. A lot of potential here.");
-  }
-  drop() {
-    result("No way! You paid good money for this!");
-  }
-  use() {
-    gumWad.inHand = true;
-    console.log(gumWad.inHand);
-    result(
-      "You experience a wave of minty freshness that is, like most pleasures in life, sadly fleeting."
-    );
-    updateInventory();
-  }
+    constructor(name, inHand) {
+        super(name, inHand);
+    }
+    lookAt() {
+        result("A full pack of unchewed gum. A lot of potential here.");
+    }
+    drop() {
+        result("No way! You paid good money for this!");
+    }
+    use() {
+        gumWad.inHand = true;
+        console.log(gumWad.inHand);
+        result(
+            "You experience a wave of minty freshness that is, like most pleasures in life, sadly fleeting."
+        );
+        updateInventory();
+    }
 }
 //build chewed gum subclass
 class ChewedGum extends Item {
-  constructor(name, inHand) {
-    super(name, inHand);
-  }
-  lookAt() {
-    result("A sticky wad of gum.");
-  }
-  drop() {
-    this.inHand = false;
-    result(
-      "With great effort, you peel it off your palm. This stuff is like super glue!"
-    );
-    updateInventory();
-  }
-  use() {
-    console.log(actionReady);
-    if (usedItems[0].innerText === "leaf") {
-      this.inHand = false;
-      leaf.isSticky = true;
-      leaf.name = "sticky leaf";
-      result(
-        "You shove a big wad of gum onto one side of the leaf, ruining its exquisite natural beauty. You monster."
-      );
-      updateInventory();
-    } else {
-      super.use();
+    constructor(name, inHand) {
+        super(name, inHand);
     }
-  }
+    lookAt() {
+        result("A sticky wad of gum.");
+    }
+    drop() {
+        this.inHand = false;
+        result(
+            "With great effort, you peel it off your palm. This stuff is like super glue!"
+            );
+        updateInventory();
+    }
+    use() {
+        console.log(actionReady);
+        if (usedItems[0].innerText === "leaf") {
+            this.inHand = false;
+            leaf.isSticky = true;
+            leaf.name = "sticky leaf";
+            result(
+            "You shove a big wad of gum onto one side of the leaf, ruining its exquisite natural beauty. You monster."
+            );
+            updateInventory();
+        } else {
+            super.use();
+        }
+    }
 }
-
+            
 //build Leaf subclass
 class Leaf extends Item {
-  constructor(name, inHand, isSticky = false) {
-    super(name, inHand);
-    this.isSticky = isSticky;
-  }
-  // walkTo(){}
-  lookAt() {
-    result("It's a leaf.");
-  }
-  // talkTo(){}
-  grab() {
-    this.inHand = true;
-    result("You pick up the leaf.");
-  }
-  drop() {
-    this.inHand = false;
-    if (this.isSticky === true) {
-      leafStuck = true;
-      result("It plummets to the ground with a splat, gum-side down. It looks like a perfectly innocent leaf.");
-    } else {
-      result("It floats gracefully to the ground.");
+    constructor(name, inHand, isSticky = false) {
+        super(name, inHand);
+        this.isSticky = isSticky;
     }
-    updateInventory();
-  }
-  use() {
-    console.log(actionReady);
-    if (usedItems[0].innerText === "wad of chewed gum") {
-      gumWad.inHand = false;
-      this.isSticky = true;
-      this.name = "sticky leaf";
-      result(
-        "You shove a big wad of gum onto one side of the leaf, ruining its exquisite natural beauty. You monster."
-      );
-      updateInventory();
-    } else {
-      super.use();
+    // walkTo(){}
+    lookAt() {
+        result("It's a leaf.");
     }
-  }
+    // talkTo(){}
+    grab() {
+        this.inHand = true;
+        result("You pick up the leaf.");
+    }
+    drop() {
+        this.inHand = false;
+        if (this.isSticky === true) {
+        leafStuck = true;
+        result("It plummets to the ground with a splat, gum-side down. It looks like a perfectly innocent leaf.");
+        } else {
+            result("It floats gracefully to the ground.");
+        }
+        updateInventory();
+    }
+    use() {
+        if (usedItems[0].innerText === "wad of chewed gum") {
+            gumWad.inHand = false;
+            this.isSticky = true;
+            this.name = "sticky leaf";
+            result(
+            "You shove a big wad of gum onto one side of the leaf, ruining its exquisite natural beauty. You monster."
+            );
+            updateInventory();
+        } else {
+            super.use();
+        }
+    }
 }
 // jacket subClass
 class Jacket extends Item {
-  constructor(name, inHand) {
-    super(name, inHand);
-  }
-  grab() {
-    this.inHand = false;
-    result("You remove the jacket.");
-    updateInventory();
-  }
-  drop() {
-    this.inHand = false;
-    result("You remove the jacket.");
-    updateInventory();
-  }
-  use() {
-    this.inHand = false;
-    result("You remove the jacket.");
-    updateInventory();
-  }
+    constructor(name, inHand) {
+        super(name, inHand);
+    }
+    grab() {
+        this.inHand = false;
+        result("You remove the jacket.");
+        updateInventory();
+    }
+    drop() {
+        this.inHand = false;
+        result("You remove the jacket.");
+        updateInventory();
+    }
 }
+
 //build water subclass
 class Water extends Item {
   constructor(name, inHand, isSparkly = false) {
@@ -394,13 +485,18 @@ const bottledWater = new Water("bottled water");
 const sparklyLotion = new Lotion("sparkly lotion");
 const dict = new Dictionary("French/English dictionary");
 
-//in-world targets
+//initialized in-world targets
+//ROOM 1
 const frontDoor = new Door("front door");
 const branch = new TreeBranch("branch");
 const gruffPerson = new LeafBlower('gruff older person')
 const phonePerson = new PhoneTalker('well-dressed person')
+//ROOM 2
+const table = new Table('table')
+const server = new Server('server')
 
-// inventory array
+
+// interactive targets array
 let interactiveTargets = [
   frontDoor,
   branch,
@@ -409,6 +505,8 @@ let interactiveTargets = [
   gum,
   gumWad,
   leaf,
+  table,
+  server,
   jacket,
   bottledWater,
   sparklyLotion,
@@ -540,14 +638,14 @@ const getResults = (target) => {
 };
 
 changeRooms = () => {
-    gum.inHand = false
-    gumWad.inHand = false
-    leaf.inHand= false
-    jacket.inHand = true
-    room1.style.display = 'none'
-    room2.style.display = 'block'
-    updateInventory()
-}
+        gum.inHand = false
+        gumWad.inHand = false
+        leaf.inHand= false
+        jacket.inHand = true
+        room1.style.display = 'none'
+        room2.style.display = 'block'
+        updateInventory()
+    }
 
 const gameLoop = () => {
   generateButtons();
@@ -561,4 +659,5 @@ const gameLoop = () => {
 document.addEventListener("DOMContentLoaded", () => {
   displayInventory();
   setInterval(gameLoop, 60);
+  changeRooms()
 });
