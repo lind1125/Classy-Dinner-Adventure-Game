@@ -223,7 +223,7 @@ class Menu extends Item {
             console.log(dict.inHand)
             if (server.isPresent === true && dict.inHand === true){
                 result(
-                'After several desperate flips of the pages of the dictionary, you successfully order off the menu. The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
+                'After several desperate flips of the pages of the dictionary, you successfully order off the menu! The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
                 );
                 // gameOver()
             } else {
@@ -264,7 +264,7 @@ class Server extends Item {
         if (usedItems[0].innerText === "menu") {
             if (this.isPresent === true && dict.inHand === true){
                 result(
-                'After several desperate flips of the pages of the dictionary, you successfully order off the menu. The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
+                'After several desperate flips of the pages of the dictionary, you successfully order off the menu! The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
                 );
                 // gameOver()
             } else {
@@ -550,12 +550,18 @@ class Dictionary extends Item {
     // grab(){}
     drop() {
     result("After all that?!");
-  }
-  // use(){
-  // if location equals table and waiter equals present, run win function
-  // } else {
-  // result('Oh, is THAT what that word means? No wonder they were so mad.')
-  // }
+    }
+    use(){
+//   if location equals table and waiter equals present, run win function
+        if (server.isPresent === true && room2.style.display === 'block'){
+            result(
+            'After several desperate flips of the pages of the dictionary, you successfully order off the menu! The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
+            );
+            // gameOver()(){
+        } else {
+        result('Oh, is THAT what that word means? No wonder they were so mad.')
+        }
+    }
 }
 
 //#### inventory object variables
@@ -742,6 +748,7 @@ changeRooms = () => {
         updateInventory()
         clear()
     }
+
 
 const gameLoop = () => {
   generateButtons();
