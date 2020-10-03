@@ -10,6 +10,10 @@ body {
     height: 400px;
 }
 
+#room2 {
+    display: none;
+}
+
 #action-display {
     background-color: skyblue;
     display: flex;

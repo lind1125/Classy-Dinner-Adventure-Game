@@ -1,5 +1,4 @@
 //variables for narrative scenarios
-let room = "outside";
 let actionReady = false;
 let leafPile = false;
 let leafStuck = false;
@@ -8,12 +7,15 @@ let waiterPresent = false;
 let usedItems = [];
 
 //#####
-// action display window
+// display window stuff
+let room1 = document.querySelector('#room1')
+let room2 = document.querySelector('#room2')
 let actionUpdate = document.querySelector("#action-display");
 let displayedAction = actionUpdate.children[0];
 let displayedTarget = actionUpdate.children[1];
 let displayedWith = document.querySelector("#displayed-with");
 
+//interactive elements
 const clickableWords = document.getElementsByClassName("interactive");
 const actionTargets = document.getElementsByClassName("target");
 const selectedTargets = document.getElementsByClassName("target selected");
@@ -95,8 +97,10 @@ class Door extends Item {
   walkTo() {
     if (reservation === true) {
       result(
-        "You confidently walk into the restaurant. The maître d' arches a single eyebrow and asks if you have a reservation. \"Smith, party of two,\" you say. When the maître d' sternly informs you that only complete parties will be seated, you calmly explain that the Pardyovtoo family has a rich and storied history in this city, and that you would not have expected such ignorance at an establishment such as this. The maître d' swiftly apologizes and leads you to your table."
+        "You confidently walk into the restaurant. The maître d' arches a single eyebrow and asks if you have a reservation. \"Smith, party of two,\" you say. When the maître d' sternly informs you that only complete parties will be seated, you calmly explain that the Pardyovtoo family has a rich and storied history in this city, and that you would not have expected such ignorance at an establishment such as this. The maître d' swiftly apologizes. While leading you to your table, apologetically but still rather forcefully put you in a dinner jacket, as the restaurant (apparently) has a strict dress code."
       );
+      changeRooms()
+      
     } else {
       result(
         "You confidently walk into the restaurant. The maître d' arches a single eyebrow and asks if you have a reservation. You mutter a series of non-committal syllables while desperately trying to read the upside-down, flowing script written on the reservation sheet. The maître d' forces you back outside through sheer force of upper-class disdain for the underprivileged."
@@ -169,6 +173,8 @@ class PhoneTalker extends Item {
         } else if (leafPile === true && leafStuck === true) {
             result('They are covering one ear with one hand while screaming to be heard over the leaf blower. \"WELL, IF YOU DON\'T GET HERE SOON I\'M GONNA HAVE TO GO IN AND USE THE BATHROOM! WHAT?! NO, IT\'LL BE FINE! JUST TELL THEM YOU\'RE WITH SMITH, PARTY OF TWO!\"')
             reservation = true
+            leafPile = false
+            leafStuck = false
         } else {
             result('\"Don\'t worry about it, baby,\" they say. \"Yes, I got a reservation! It\'s...\"\nThey abruptly stop talking when they notice you eavesdropping. You smile apologetically and step away.')
         }
@@ -533,14 +539,23 @@ const getResults = (target) => {
   }
 };
 
+changeRooms = () => {
+    gum.inHand = false
+    gumWad.inHand = false
+    leaf.inHand= false
+    jacket.inHand = true
+    room1.style.display = 'none'
+    room2.style.display = 'block'
+    updateInventory()
+}
+
 const gameLoop = () => {
   generateButtons();
   if (leafPile === true && leafStuck === false){
-      setTimeout(stopBlowing, 60000)
-      clearTimeout(stopBlowing, 60001)
+    const displayLeafEnd = setTimeout(stopBlowing, 60000)
+
   }else if (leafPile === true && leafStuck === true){
-      setTimeout(gruffPerson.lookAt, 180000)
-      clearTimeout(gruffPerson.lookAt, 180001)
+      const displayLeafStruggle = setTimeout(gruffPerson.lookAt, 180000)
   }
 };
 document.addEventListener("DOMContentLoaded", () => {
