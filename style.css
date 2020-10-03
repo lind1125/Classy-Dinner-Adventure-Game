@@ -1,13 +1,25 @@
 body {
-    background-color: beige;
+    background-color: rgb(248, 248, 197);
     text-align: center;
 }
 
+h1 {
+    font-family: Apple Chancery, cursive
+}
 .narrative {
-    background-color: slateblue;
+    background-color: whitesmoke;
+    border: 2px solid brown;
+    border-radius: 30px;
+    padding: 10px;
     margin: auto;
     width: 50%;
     height: 400px;
+    text-align: center;
+}
+
+.narrative p {
+    font-family: 'Press Start 2P', monospace;
+    font-size: x-large;
 }
 
 #room2 {
@@ -24,16 +36,19 @@ body {
 
 #action-display {
     background-color: skyblue;
+    opacity: 0.8;
     display: flex;
     justify-content: space-evenly;
     margin: 10px auto;
     width: 50%;
     height: 2.5em;
+
 }
 
 #action-display div {
     padding-top: .5em;
-    /* border: 2px solid black; */
+    font-family: 'Press Start 2P', monospace;
+
 }
 
 #displayed-with {
@@ -48,7 +63,11 @@ section {
 }
 
 section div {
-    background-color: gray;
+    background-color: whitesmoke;
+    border: 2px solid rgb(248, 204, 204);
+    border-radius: 30px;
+    padding: 10px;
+    /* background-color: rgb(248, 204, 204); */
     height: 180px;
     width: 400px;
     margin: 0 5px;
@@ -60,10 +79,20 @@ section div {
 }
 
 .action {
-    background-color: hotpink;
+    background-color: rgb(33, 144, 189);
     height: 60px;
     width: 100px;
     margin: 1px;
+    font-size: x-large;
+}
+
+#inventory {
+    font-size: large;
+}
+
+
+h4 {
+    margin: 10px;
 }
 
 ul {
@@ -80,14 +109,16 @@ ul {
 
 .target {
     font-weight: bold;
-    font-style: italic;
+    font-style: oblique;
+    
+
 }
 .selected {
     background-color: #bada55;
 }
 
 
-/* Modal Box styling */
+/* Modal Box styling modified from W3 schools lesson on modal */
 
 .modal {
     display: none; /* Hidden by default */
@@ -96,14 +127,16 @@ ul {
     left: 0;
     top: 0;
     width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    height: 400px; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     /* background-color: rgb(0,0,0); Fallback color */
     /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
   }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #f0abab;
+    font-family: 'Press Start 2P', monospace;
+    font-size: large;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
