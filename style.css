@@ -66,6 +66,10 @@ ul {
     width: 100px;
 }
 
+.target {
+    font-weight: bold;
+    font-style: italic;
+}
 .selected {
     background-color: #bada55;
 }
