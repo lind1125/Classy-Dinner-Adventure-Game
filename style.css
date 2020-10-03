@@ -14,6 +14,10 @@ body {
     display: none;
 }
 
+#room3 { 
+    display: none;
+}
+
 #action-display {
     background-color: skyblue;
     display: flex;

@@ -39,21 +39,23 @@ const result = (text) => {
   modal.style.display = "block";
   span.onclick = function () {
     modal.style.display = "none";
-    // selectedActions[0].classList.remove('selected')
-    if (selectedActions.length > 0) {
-      selectedActions[0].classList.remove("selected");
-    }
-    // selectedTargets[0].classList.remove('selected')
-    while (selectedTargets.length > 0) {
-      selectedTargets[0].classList.remove("selected");
-    }
-    actionReady = false;
-    displayedAction.innerText = "";
-    displayedTarget.innerText = "";
-    displayedWith.style.display = "none";
-    usedItems = [];
+    clear()
   };
 };
+
+clear = () => {
+    if (selectedActions.length > 0) {
+        selectedActions[0].classList.remove("selected");
+      }
+      while (selectedTargets.length > 0) {
+        selectedTargets[0].classList.remove("selected");
+      }
+      actionReady = false;
+      displayedAction.innerText = "";
+      displayedTarget.innerText = "";
+      displayedWith.style.display = "none";
+      usedItems = [];
+}
 
 // #### inventory items
 class Item {
@@ -199,7 +201,10 @@ class Table extends Item {
         if (room2.style.display === 'block'){
             result('You\'re already there.')
         } else {
-            room2.style.display === 'block'
+            room2.style.display = 'block'
+            room3.style.display = 'none'
+            room4.style.display = 'none'
+            clear()
         }
     }
 }
@@ -209,15 +214,27 @@ class Menu extends Item {
         super(name)
 
     }
-    // walkTo(){}
     lookAt(){
         result('An exquisite selection of the finest French cuisine this city has to offer...or so you assume. You can\'t read a word of it! It\'s entirely in French.')
     }
-    // talkTo(){}
-    // grab(){}
-    // drop(){}
-    // use(){}
+    use(){
+        if (usedItems[0].innerText === "server") {
+            console.log(server.isPresent)
+            console.log(dict.inHand)
+            if (server.isPresent === true && dict.inHand === true){
+                result(
+                'After several desperate flips of the pages of the dictionary, you successfully order off the menu. The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
+                );
+                // gameOver()
+            } else {
+                result('Using an accent that is, at best, cartoonish and is, at worst, extremely offensive, you attempt to read from the menu. The server does not hide their disgust and walks away in a huff.')
+            }
+        } else {
+            super.use();
+        }
+    }
 }
+
 //server
 class Server extends Item {
     constructor(name){
@@ -238,13 +255,14 @@ class Server extends Item {
     talkTo(){
         if (this.isPresent === false){
             result('The server comes over and gives what could either be a curt smile or an involuntary facial tic.')
+            this.isPresent = true
         } else {
             result('The server waits expectantly, glancing very deliberately at the menu.')
         }
     }
     use(){
         if (usedItems[0].innerText === "menu") {
-            if (dict.inHand === true){
+            if (this.isPresent === true && dict.inHand === true){
                 result(
                 'After several desperate flips of the pages of the dictionary, you successfully order off the menu. The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
                 );
@@ -260,23 +278,51 @@ class Server extends Item {
 
 // kitchen
 class Kitchen extends Item {
-    constructor(name, inHand){
-        super(name, inHand)
+    constructor(name){
+        super(name)
     }
-    // walkTo(){}
-    // lookAt(){}
-    // talkTo(){}
-    // grab(){}
-    // drop(){}
-    // use(){}
+    walkTo(){
+        if (room3.style.display === 'block'){
+            result('You\'re already there.')
+        } else {
+            room2.style.display = 'none'
+            room3.style.display = 'block'
+            room4.style.display = 'none'
+            clear()
+        }
+    }
+    lookAt(){
+        if (room3.style.display === 'block'){
+            result('Yep, it\'s a kitchen.')
+        } else {
+            result('You\'re too far away.')
+        }
+    }
 }
+
 //restroom
 class Restroom extends Item {
-    constructor(name, inHand){
-        super(name, inHand)
+    constructor(name){
+        super(name)
     }
-    // walkTo(){}
-    // lookAt(){}
+    walkTo(){
+        if (room4.style.display === 'block'){
+            result('You\'re already there.')
+        } else {
+            room2.style.display = 'none'
+            room3.style.display = 'none'
+            room4.style.display = 'block'
+            clear()
+        }
+    }
+    lookAt(){
+        if (room4.style.display === 'block'){
+            result('Yep, it\'s a bathroom.')
+        } else {
+            result('You\'re too far away.')
+        }
+    }
+    
     // talkTo(){}
     // grab(){}
     // drop(){}
@@ -405,7 +451,7 @@ class Water extends Item {
   }
   // talkTo(){}
   grab() {
-    if (jacket.inHand === true) {
+    if (jacket.inHand === false) {
       this.inHand = true;
       result("You pick up a bottle of water.");
       updateInventory();
@@ -413,6 +459,7 @@ class Water extends Item {
       result(
         'The chef looks up. "Hey, get away from there! This area is staff only." He shuffles you back to your table.'
       );
+      table.walkTo()
     }
   }
   drop() {
@@ -477,7 +524,7 @@ class Dictionary extends Item {
 }
 
 //#### inventory object variables
-const gumWad = new ChewedGum("wad of chewed gum", false);
+const gumWad = new ChewedGum("wad of chewed gum");
 const gum = new PackOfGum("pack of gum", true); //only one that should start as true!
 const leaf = new Leaf("leaf");
 const jacket = new Jacket("jacket");
@@ -494,7 +541,8 @@ const phonePerson = new PhoneTalker('well-dressed person')
 //ROOM 2
 const table = new Table('table')
 const server = new Server('server')
-
+const menu = new Menu('menu')
+const kitchen = new Kitchen('kitchen')
 
 // interactive targets array
 let interactiveTargets = [
@@ -506,7 +554,9 @@ let interactiveTargets = [
   gumWad,
   leaf,
   table,
+  menu,
   server,
+  kitchen,
   jacket,
   bottledWater,
   sparklyLotion,
@@ -645,6 +695,7 @@ changeRooms = () => {
         room1.style.display = 'none'
         room2.style.display = 'block'
         updateInventory()
+        clear()
     }
 
 const gameLoop = () => {
