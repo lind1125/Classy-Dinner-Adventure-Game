@@ -317,17 +317,13 @@ class Restroom extends Item {
     }
     lookAt(){
         if (room4.style.display === 'block'){
-            result('Yep, it\'s a bathroom.')
+            result('Yep, it\'s a restroom.')
         } else {
             result('You\'re too far away.')
         }
     }
-    
-    // talkTo(){}
-    // grab(){}
-    // drop(){}
-    // use(){}
 }
+
 // Inventory items
 //ROOM 1
 // chewing gum (in inventory at start of game)
@@ -443,7 +439,6 @@ class Water extends Item {
     super(name, inHand);
     this.isSparkly = isSparkly;
   }
-  // walkTo(){}
   lookAt() {
     result(
       "Eau de Mediocre: A working-class flat water packaged in a 1% bottle"
@@ -465,42 +460,55 @@ class Water extends Item {
   drop() {
     result("No way! You would have paid good money for this!");
   }
-  // use(){
-  //if (with element is lotion) {
-  // isSparkly becomes true and this.name becomes "sparkling water"
-  // } else if (with element is bathroomAttendant and isSparkly is true) {
-  //     this.inHand = false
-  //     dict.inHand = true
-  //     result('The attendant nods appreciately. Now, THIS is a classy beverage. Cheers, mate. Enjoy the book.')
-  // }
-  // else {
-  //     result('Refreshing!')
-  // }
-  // }
+  use() {
+    if (usedItems[0].innerText === "sparkly lotion") {
+        sparklyLotion.inHand = false;
+        this.isSparkly = true;
+        this.name = "sparkling water";
+        result(
+        "You squeeze the contents of the entire bottle of lotion into the bottle. The water is a little thicker than might be ideal, but it glints in the light like a precious gem."
+        );
+        updateInventory();
+    } else if (usedItems[0].innerText === "attendant"){
+        this.inHand = false
+        dict.inHand = true
+        result('The attendant nods appreciately. Now, THIS is a classy beverage. Cheers, mate. Enjoy the book.')
+        updateInventory()
+    } else {
+        super.use();
+        }
+    }
 }
 //build lotion subclass
 class Lotion extends Item {
   constructor(name, inHand) {
     super(name, inHand);
   }
-  // walkTo(){}
-  // lookAt(){}
-  // talkTo(){}
+  lookAt(){
+    result('The bottle reads: \n"DIAMOND DUST"\n (Contains no real diamonds\nMay contain up to 90% dust)')
+  }
   grab() {
     this.inHand = true;
     result(
-      '"Hey, look over there!" you shout. The woman turns for a moment, and you swipe the bottle of lotion. When she turns back, she furrows her brow for a moment, shrugs, and pulls another bottle of lotion out of her bag.'
+      '"Hey, look over there!" you shout. The person at the sink turns for a moment, and you swipe the bottle of lotion. When they turn back, they furrow their brow for a moment, shrug, and pull another bottle of lotion out of their bag.'
     );
     updateInventory();
   }
   drop() {
     result("No way! You would have paid good money for this!");
   }
-  // use(){
-  //if with element is water, run water.use()
-  // } else {
-  //     result('Your skin is absolutely GLOWING, and you make a mental note to work on your skincare routine.')
-  // }
+  use(){
+    if (usedItems[0].innerText === "bottled water") {
+        this.inHand = false;
+        bottledWater.isSparkly = true;
+        bottledWater.name = "sparkling water";
+        result(
+        "You squeeze the contents of the entire bottle of lotion into the bottle. The water is a little thicker than might be ideal, but it glints in the light like a precious gem."
+        );
+        updateInventory();
+    else {
+      result('Your skin is absolutely GLOWING. You make a mental note to work on your skincare routine.')
+  }
 }
 //build dict subclass
 class Dictionary extends Item {
@@ -543,6 +551,7 @@ const table = new Table('table')
 const server = new Server('server')
 const menu = new Menu('menu')
 const kitchen = new Kitchen('kitchen')
+const restroom = new Restroom('restroom')
 
 // interactive targets array
 let interactiveTargets = [
@@ -557,6 +566,7 @@ let interactiveTargets = [
   menu,
   server,
   kitchen,
+  restroom,
   jacket,
   bottledWater,
   sparklyLotion,
