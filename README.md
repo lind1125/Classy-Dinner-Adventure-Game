@@ -22,10 +22,17 @@ The goal of the game is to get into a fancy restaurant and successfully order a 
 I first created a puzzle dependency chart to nail down what actions should be taken in what sequence to win the game.
 
 ##### Puzzle Dependency Chart for "Classy Dinner Adventure"
+
 <img src="./process_materials/puzzle_dependency_chart.jpg">
 
-I then created a couple of rough wireframes, ultimately combining layout concepts from the two:
+I then created a couple of rough wireframes, ultimately combining layout concepts from the two.
 
+#### Wireframe
+<img src="./process_materials/wireframe.jpg">
+
+I then built out the interactive inventory objects and the first "room" in order to have a sandbox to figure out the necessary functions for the game to take in input and execute properly.
+
+Once all primary functions were running, I built out the other rooms and interactive objects, structuring the necessary sequence of actions for a win scenario as I went.
 
 #### User stories
 
