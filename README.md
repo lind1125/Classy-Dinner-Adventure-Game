@@ -1,19 +1,21 @@
-# SEI_project1
-### AKA "Classy Dinner Adventure"
+# SEI Project 1: "Classy Dinner Adventure"
+
+### Demo: https://lind1125.github.io/SEI_project1/
 
 A short text adventure game using point and click input.
 
+## Technologies Used
+* HTML
+* CSS
+* Javacript
+* Written in [VS Code](https://code.visualstudio.com/) 
 
 ## How to Play
 
 The game can be found [here as a github page](https://lind1125.github.io/SEI_project1/).
 Use the action buttons to select how you would like to interact with the visible text. All inventory items can be acted upon. Any bold words in the narrative window can also be acted upon. The goal is try to get into the restaurant and to successfully order a meal.
 
-## Built With
-* HTML
-* CSS
-* Vanilla JS
-* Written in [VS Code](https://code.visualstudio.com/) 
+
 
 ## Acknowledgements
 * Thanks to Taylor Darneille for the assist in getting the click even behavior to work properly for the interface to be used correctly.
