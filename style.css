@@ -18,6 +18,10 @@ body {
     display: none;
 }
 
+#room4 {
+    display: none;
+}
+
 #action-display {
     background-color: skyblue;
     display: flex;

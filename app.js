@@ -276,7 +276,7 @@ class Server extends Item {
     }
 }
 
-// kitchen
+// ROOM 3 Kitchen
 class Kitchen extends Item {
     constructor(name){
         super(name)
@@ -300,7 +300,7 @@ class Kitchen extends Item {
     }
 }
 
-//restroom
+//ROOM 4 Restroom
 class Restroom extends Item {
     constructor(name){
         super(name)
@@ -320,6 +320,33 @@ class Restroom extends Item {
             result('Yep, it\'s a restroom.')
         } else {
             result('You\'re too far away.')
+        }
+    }
+}
+
+class Attendant extends Item {
+    constructor(name){
+        super(name)
+    }
+    walkTo(){
+        result('You notice that right at the top of the attendant\'s pile of reading materials is a French\/English dictionary! "Got yer eye on that, do ya?" the attendant croaks. "Tell you what, I\'ll let you keep it if you do me a favor. I\'m mighty parched and could use some water. But given my high-class surroundings, I\'ll only drink the fancy stuff. Deal?"')
+    }
+    lookAt(){
+        this.walkTo()
+    }
+    talkTo(){
+        this.walkTo()
+    }
+    use(){
+        if (usedItems[0].innerText === "sparkling water"){
+            bottledWater.inHand = false
+            dict.inHand = true
+            result('The attendant nods appreciately. Now, THIS is a classy beverage. Cheers, mate. Enjoy the book.')
+            updateInventory()
+        } else if (usedItems[0].innerText === "bottled water") {
+            result('The attendant snorts derisively. "No, no, this here\'s not fancy. Get me the SPARKLING stuff."')
+        }else {
+            super.use()
         }
     }
 }
@@ -469,7 +496,7 @@ class Water extends Item {
         "You squeeze the contents of the entire bottle of lotion into the bottle. The water is a little thicker than might be ideal, but it glints in the light like a precious gem."
         );
         updateInventory();
-    } else if (usedItems[0].innerText === "attendant"){
+    } else if (usedItems[0].innerText === "attendant" && this.name === "sparkling water"){
         this.inHand = false
         dict.inHand = true
         result('The attendant nods appreciately. Now, THIS is a classy beverage. Cheers, mate. Enjoy the book.')
@@ -481,47 +508,47 @@ class Water extends Item {
 }
 //build lotion subclass
 class Lotion extends Item {
-  constructor(name, inHand) {
+    constructor(name, inHand) {
     super(name, inHand);
-  }
-  lookAt(){
-    result('The bottle reads: \n"DIAMOND DUST"\n (Contains no real diamonds\nMay contain up to 90% dust)')
-  }
-  grab() {
-    this.inHand = true;
-    result(
-      '"Hey, look over there!" you shout. The person at the sink turns for a moment, and you swipe the bottle of lotion. When they turn back, they furrow their brow for a moment, shrug, and pull another bottle of lotion out of their bag.'
-    );
-    updateInventory();
-  }
-  drop() {
-    result("No way! You would have paid good money for this!");
-  }
-  use(){
-    if (usedItems[0].innerText === "bottled water") {
-        this.inHand = false;
-        bottledWater.isSparkly = true;
-        bottledWater.name = "sparkling water";
+    }
+    lookAt(){
+        result('The bottle reads: \n"DIAMOND DUST"\n (Contains no real diamonds\nMay contain up to 90% dust)')
+    }
+    grab() {
+        this.inHand = true;
         result(
-        "You squeeze the contents of the entire bottle of lotion into the bottle. The water is a little thicker than might be ideal, but it glints in the light like a precious gem."
+        '"Hey, look over there!" you shout. The person at the sink turns for a moment, and you swipe the bottle of lotion. When they turn back, they furrow their brow for a moment, shrug, and pull another bottle of lotion out of their bag.'
         );
         updateInventory();
-    else {
-      result('Your skin is absolutely GLOWING. You make a mental note to work on your skincare routine.')
-  }
+    }
+    drop() {
+        result("No way! You would have paid good money for this!");
+    }
+    use(){
+        if (usedItems[0].innerText === "bottled water") {
+            this.inHand = false;
+            bottledWater.isSparkly = true;
+            bottledWater.name = "sparkling water";
+            result(
+            "You squeeze the contents of the entire bottle of lotion into the bottle. The water is a little thicker than might be ideal, but it glints in the light like a precious gem."
+            );
+            updateInventory();
+        } else {
+            result('Your skin is absolutely GLOWING. You make a mental note to work on your skincare routine.')
+        }
+    }
 }
 //build dict subclass
 class Dictionary extends Item {
-  constructor(name, inHand) {
-    super(name, inHand);
-  }
-  // walkTo(){}
-  lookAt() {
-    result('"Learn French on the Toilet" by Jacques Cologne.');
-  }
-  // talkTo(){}
-  // grab(){}
-  drop() {
+    constructor(name, inHand) {
+        super(name, inHand);
+    }
+
+    lookAt() {
+        result('"Learn French on the Toilet" by Jacques Cologne.');
+    }
+    // grab(){}
+    drop() {
     result("After all that?!");
   }
   // use(){
@@ -532,11 +559,15 @@ class Dictionary extends Item {
 }
 
 //#### inventory object variables
+//ROOM 1
 const gumWad = new ChewedGum("wad of chewed gum");
 const gum = new PackOfGum("pack of gum", true); //only one that should start as true!
 const leaf = new Leaf("leaf");
+//ROOM 2
 const jacket = new Jacket("jacket");
+//ROOM 3
 const bottledWater = new Water("bottled water");
+//ROOM 4
 const sparklyLotion = new Lotion("sparkly lotion");
 const dict = new Dictionary("French/English dictionary");
 
@@ -550,8 +581,11 @@ const phonePerson = new PhoneTalker('well-dressed person')
 const table = new Table('table')
 const server = new Server('server')
 const menu = new Menu('menu')
+//ROOM 3
 const kitchen = new Kitchen('kitchen')
+//ROOM 4
 const restroom = new Restroom('restroom')
+const attendant = new Attendant('attendant')
 
 // interactive targets array
 let interactiveTargets = [
@@ -569,6 +603,7 @@ let interactiveTargets = [
   restroom,
   jacket,
   bottledWater,
+  attendant,
   sparklyLotion,
   dict,
 ];
