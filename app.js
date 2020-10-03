@@ -645,15 +645,7 @@ const updateInventory = () => {
   displayInventory();
 };
 
-const generateButtons = () => {
-  for (i = 0; i < clickableWords.length; i++) {
-    clickableWords[i].addEventListener('click', makeActive);
-  }
-  for (i = 0; i < actionTargets.length; i++) {
-    actionTargets[i].addEventListener('click', useWith);
-  }
-};
-
+// event listener callbacks
 const useWith = (e) => {
   if (e.target.classList.contains('selected')) {
     usedItems.push(e.target);
@@ -689,6 +681,17 @@ const makeActive = (e) => {
     getResults(e.target);
   }
 };
+
+//function to set event listeners
+const generateButtons = () => {
+  for (i = 0; i < clickableWords.length; i++) {
+    clickableWords[i].addEventListener('click', makeActive);
+  }
+  for (i = 0; i < actionTargets.length; i++) {
+    actionTargets[i].addEventListener('click', useWith);
+  }
+};
+
 
 const getResults = (target) => {
   if (walkBtn.classList.contains('selected')) {

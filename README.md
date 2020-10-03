@@ -2,7 +2,13 @@
 
 ### Demo: https://lind1125.github.io/SEI_project1/
 
-A short text adventure game using point and click input.
+---
+
+## Concept:
+
+A text-based game using a point-and-click interface to interact with the game. Using OOP and DOM Manipulation, clicking particular areas on page in particular sequences will produce specific results. A particular sequence of results will progress the user forward.
+
+The goal of the game is to get into a fancy restaurant and successfully order a meal. You accomplish this goal by acquiring and/or manipulating things and/or people around you. Once you've successfully ordered a meal, you win!
 
 ## Technologies Used
 * HTML
@@ -10,12 +16,22 @@ A short text adventure game using point and click input.
 * Javacript
 * Written in [VS Code](https://code.visualstudio.com/) 
 
-## How to Play
+## Approach:
 
-The game can be found [here as a github page](https://lind1125.github.io/SEI_project1/).
-Use the action buttons to select how you would like to interact with the visible text. All inventory items can be acted upon. Any bold words in the narrative window can also be acted upon. The goal is try to get into the restaurant and to successfully order a meal.
+#### Overview
+I first created a puzzle dependency chart to nail down what actions should be taken in what sequence to win the game.
+
+##### Puzzle Dependency Chart for "Classy Dinner Adventure"
+<img src="./process_materials/puzzle_dependency_chart.jpg">
+
+I then created a couple of rough wireframes, ultimately combining layout concepts from the two:
 
 
+#### User stories
+
+As a user, I expect to see a set of action buttons to select how I would like to interact with the other clickable elements on the page. I expect all inventory items to be interactive. I expect clear visual information to denote what other elements on the page are interactive. I expect clear visual information to denote when an element has been selected.
+
+#### Development Plan
 
 ## Acknowledgements
 * Thanks to Taylor Darneille for the assist in getting the click even behavior to work properly for the interface to be used correctly.
