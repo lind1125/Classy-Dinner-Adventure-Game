@@ -741,6 +741,14 @@ changeRooms = () => {
         clear()
     }
 
+const gameOver = () => {
+    clear()
+    room4.style.display = 'none'
+    room1.style.display = 'block'
+    dict.inHand = false
+    gum.inHand = true
+    result('You did it! You ate a classy dinner! But at what cost?\nSpeaking of cost...how are you going to pay for this?')
+}
 
 const gameLoop = () => {
   generateButtons();
