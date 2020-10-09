@@ -553,7 +553,7 @@ class Dictionary extends Item {
             result(
             'After several desperate flips of the pages of the dictionary, you successfully order off the menu! The server seems unimpressed, but dutifully writes down your order and rushes off to the kitchen.'
             );
-            gameOver(){
+            gameOver()
         } else {
         result('Oh, is THAT what that word means? No wonder they were so mad.')
         }
