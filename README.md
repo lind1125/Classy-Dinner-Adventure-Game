@@ -4,6 +4,8 @@
 
 ---
 
+## [Version 2.0 in development!](https://github.com/lind1125/Classy-Dinner_2.0)
+
 ## Concept:
 
 A text-based game using a point-and-click interface to interact with the game. Using OOP and DOM Manipulation, clicking particular areas on page in particular sequences will produce specific results. A particular sequence of results will progress the user forward.
